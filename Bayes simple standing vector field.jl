@@ -10,64 +10,85 @@ e₂ = 0.01
 ϵ = (1-e₁)*(1-e₂) + e₁*e₂
 e = e₂
 r = 3
-τ = 1e8
-tspan = (0.0,20000)
+τ = 10000
+tspan = (0.0,100)
 
-function imgscore!(du,u,p,t)
-        g = u[1]*u[4] + u[2]*u[5] + u[3]*u[6]
-
-        #Imitation dynamics: u[1]-u[3]
-        Px = r*(u[1] + u[3]*u[4]) - 1
-        Py = r*(u[1] + u[3]*u[5])
-        Pz = r*(u[1] + u[3]*u[6]) - g
-        P̄ = u[1]*Px + u[2]*Py + u[3]*Pz
-        du[1] = u[1]*(Px - P̄)
-        du[2] = u[2]*(Py - P̄)
-        du[3] = u[3]*(Pz - P̄)
-
-        # Reputation dynamics: u[4]-u[6]
-        Ocg = ϵ*g/(ϵ*g + e*(1 - g))
-        Odg = (1 - ϵ)*g/((1 - ϵ)*g + (1 - e)*(1 - g))
-        Icg = ϵ*Ocg + (1 - ϵ)*Odg
-        Idg = (1 - e)*Odg + e*Ocg
-        gx₊ = (1 - u[4])*Icg
-        gx₋ = u[4]*(1 - Icg)
-        gy₊ = (1 - u[5])*Idg
-        gy₋ = u[5]*(1 - Idg)
-        gz₊ = (1 - u[6])*(Icg*g + Idg*(u[1]*(1 - u[4]) + u[2]*(1 - u[5]) + u[3]*(1 - u[6])))
-        gz₋ = u[6]*((1 - Icg)*g + (1 - Idg)*(u[1]*(1 - u[4]) + u[2]*(1 - u[5]) + u[3]*(1 - u[6])))
-        du[4] = τ*(gx₊ - gx₋)
-        du[5] = τ*(gy₊ - gy₋)
-        du[6] = τ*(gz₊ - gz₋)
-end
-
-output = zeros(51^2,4)
+M=10
+X=zeros((M+1)^2)
+Y=zeros((M+1)^2)
+U=zeros((M+1)^2)
+V=zeros((M+1)^2)
 count = 1
-for m = 0:1:50
-        x = m/50
-        for n = 0:1:50-m
-                y = n/50
+for m = 0:1:M
+        x = m/M
+        for n = 0:1:M-m
+                y = n/M
                 z = 1-x-y
-                # for gx = 0:0.25:1
-                #         for gy = 0:0.25:1
-                #                 for gz = 0:0.25:1
-                                        # further initial conditions
-                                        gx=0.5
-                                        gy=0.5
-                                        gz=0.5
-                                        u₀ = [x;y;z;gx;gy;gz]
-                                        prob = ODEProblem(imgscore!,u₀,tspan)
-                                        sol = solve(prob)
-                                        output[count,1:3] = sol[1:3,end]
-                                        if all(abs.(u₀[1:3] .- sol[1:3,end]) .< 0.01)
-                                                global output[count,4] = 1
-                                        end
-                                        global count += 1
-                #                 end
-                #         end
-                # end
+                # x=0
+                # y=0.00038
+                # z=1-y
+                function f!(du,u,p,t)
+                        g = x*u[1] + y*u[2] + z*u[3]
+                        g2 = x*u[1]^2 + y*u[2]^2 + z*u[3]^2
+                        # Reputation dynamics: u[4]-u[6]
+                        # Reputation dynamics: u[4]-u[6]
+                        Ocg = ϵ*g/(ϵ*g + e*(1 - g))
+                        Odg = (1 - ϵ)*g/((1 - ϵ)*g + (1 - e)*(1 - g))
+                        Icg = ϵ*Ocg + (1 - ϵ)*Odg
+                        Idg = (1 - e)*Odg + e*Ocg
+                        Icb = 1 # ϵ*Ocb + (1 - ϵ)*Odb = 1, since Ocb = Odb = 1
+                        Idb = 1 # (1 - e)*Odb + e*Ocb = 1, since Ocb = Odb = 1
+                        gx₊ = (1 - u[1])*(Icg*g + 1-g)
+                        gx₋ = u[1]*(1 - Icg)*g
+                        gx2₊ = (u[1] - u[4])*(Icg*g + 1-g)
+                        gx2₋ = u[4]*(1 - Icg)*g
+                        gy₊ = (1 - u[2])*(Idg*g + 1-g)
+                        gy₋ = u[2]*(1 - Idg)*g
+                        gy2₊ = (u[2] - u[5])*(Idg*g + 1-g)
+                        gy2₋ = u[5]*(1 - Idg)*g
+                        gz₊ = (1 - u[3])*(Icg*g2 + (g-g2)*Idg + 1-g)
+                        gz₋ = u[3]*((1-Icg)*g2 + (g-g2)*(1-Idg))
+                        gz2₊ = (u[3] - u[6])*(Icg*g2 + (g-g2)*Idg + 1-g)
+                        gz2₋ = u[6]*((1-Icg)*g2 + (g-g2)*(1-Idg))
+                        du[1] = gx₊ - gx₋
+                        du[2] = gy₊ - gy₋
+                        du[3] = gz₊ - gz₋
+                        du[4] = gx2₊ - gx2₋
+                        du[5] = gy2₊ - gy2₋
+                        du[6] = gz2₊ - gz2₋
+                end
+                # further initial conditions
+                gx=rand()
+                gy=rand()
+                gz=rand()
+                gx2=gx*rand()
+                gy2=gy*rand()
+                gz2=gz*rand()
+                u₀ = [gx;gy;gz;gx2;gy2;gz2]
+                u₀ = [0;0.5;0.5;0;0.25;0.25]
+                prob = ODEProblem(f!,u₀,tspan)
+                sol = solve(prob)
+                (gx, gy, gz) = sol[1:3,end]
+                #
+                g = x*gx + y*gy + z*gz
+                # g2 = x*gx^2 + y*gy^2 + z*gz^2
+                # gz=(1-g)*(1-e) + g2*ϵ + (g-g2)*e
+                Px = r*(x + z*gx) - 1
+                Py = r*(x + z*gy)
+                Pz = r*(x + z*gz) - x*gx - y*gy - z*gz
+                P̄ = x*Px + y*Py + z*Pz
+                X[count] = x
+                Y[count] = y
+                dx = x*(Px - P̄)
+                dy = y*(Py - P̄)
+                norm = sqrt((dx-x)^2 + (dy-y)^2)*10
+                U[count] = dx/norm
+                V[count] = dy/norm
+                count += 1
         end
 end
+Plots.quiver(X,Y,quiver=(U,V))
+
 plot(output[:,1],output[:,2],group=output[:,3],seriestype = :scatter,xlims=(0,1),ylims=(0,1))
 plot!(output[:,1][output[:,3].==1],output[:,2][output[:,3].==1],seriestype = :scatter,xlims=(0,1),ylims=(0,1))
 plot!(output[:,1][output[:,3].==0],output[:,2][output[:,3].==0],seriestype = :scatter,xlims=(0,1),ylims=(0,1))
@@ -90,14 +111,10 @@ for m = 0:5:100
                                         y=rand()
                                         z=rand()
                                         divisor = x+y+z
-                                        x/divisor
-                                        y/divisor
-                                        z/divisor
                                         u₀ = [x/divisor;y/divisor;z/divisor;gx;gy;gz]
-                                        prob = ODEProblem(imgscore!,u₀,(0.0,500))
+                                        prob = ODEProblem(imgscore!,u₀,(0.0,100000000))
                                         sol = solve(prob)
-                                        sol[:,end]
-                                        Plots.plot(sol,vars = [(0,1), (0,2), (0,3)])
+                                        Plots.plot(sol)
                                         plot!(sol[1,:],sol[2,:],xlims=(0,1),ylims=(0,1),arrow=true,linewidth = 2,legend=false)
                 #                 end
                 #         end
@@ -161,7 +178,6 @@ out2 = out2[sortperm(out2[:, 3]), :]
 tax.plot(out2, linewidth=7, color="orangered", solid_capstyle="round")
 
 tax.show()
-gcf()
 tax.savefig("imagescore_ternary")
 gcf()
 
