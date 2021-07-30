@@ -1,34 +1,46 @@
-using DifferentialEquations, Plots
+using DifferentialEquations, Plots, PyCall, PyPlot
 #Probabilities that the donor is good given observations. Oij is the probability
 #that the donor is good given the observation of a recipient doing action
 #i={c,d}={cooperate,defect} to a recipient with reputation j={g,b}={good,bad}.
 #Specifically, Ocg=P(good|→G), Ocb=P(good|→B), Odg=P(G|↛G), and Odb=P(G|↛B).
 
 #Parameters
-e₁ = 0.01
-e₂ = 0.01
+η = 0.0000001
+e₁ = η
+e₂ = η
 ϵ = (1-e₁)*(1-e₂) + e₁*e₂
 e = e₂
 r = 3
-τ = 10000
+τ = 1000
 tspan = (0.0,100)
 
-M=10
-X=zeros((M+1)^2)
-Y=zeros((M+1)^2)
-U=zeros((M+1)^2)
-V=zeros((M+1)^2)
+M=20
+X=zeros(Int((M+2)*(M+1)/2))
+Y=zeros(Int((M+2)*(M+1)/2))
+U=zeros(Int((M+2)*(M+1)/2))
+V=zeros(Int((M+2)*(M+1)/2))
 count = 1
+minval = 0
+maxval = 1
+steps = 21
+
+x1 = repeat(range(minval,stop=maxval,length=steps)',steps)
+y1 = repeat(range(minval,stop=maxval,length=steps),1,steps)
+x1 = zeros(M+1,M+1)
+y1 = zeros(M+1,M+1)
+u1 = zeros(M+1,M+1)
+v1 = zeros(M+1,M+1)
+
 for m = 0:1:M
         x = m/M
-        for n = 0:1:M-m
+        for n = 0:1:M
                 y = n/M
                 z = 1-x-y
                 function f!(du,u,p,t)
                         g = x*u[1] + y*u[2] + z*u[3]
-                        g2 = x*u[1]^2 + y*u[2]^2 + z*u[3]^2
+                        g2 = x*u[4] + y*u[5] + z*u[6]
                         b = x*(1-u[1]) + y*(1-u[2]) + z*(1-u[3])
-                        b2 = x*(1-u[1])^2 + y*(1-u[2])^2 + z*(1-u[3])^2
+                        b2 = 1 - 2*g + g2
                         # Reputation dynamics: u[4]-u[6]
                         # Reputation dynamics: u[4]-u[6]
                         # Reputation dynamics: u[4]-u[6]
@@ -74,17 +86,36 @@ for m = 0:1:M
                 Py = r*(x + z*gy)
                 Pz = r*(x + z*gz) - x*gx - y*gy - z*gz
                 P̄ = x*Px + y*Py + z*Pz
-                X[count] = x
-                Y[count] = y
+                # X[count] = x
+                # Y[count] = y
                 dx = x*(Px - P̄)
                 dy = y*(Py - P̄)
                 norm = sqrt((dx-x)^2 + (dy-y)^2)*10
-                U[count] = dx/norm
-                V[count] = dy/norm
+                # U[count] = dx/norm
+                # V[count] = dy/norm
+                x1[m+1,n+1] = x
+                y1[m+1,n+1] = y
+                u1[m+1,n+1] = dx/norm
+                v1[m+1,n+1] = dy/norm
+                if x+y>1
+                        u1[m+1,n+1] = NaN
+                        v1[m+1,n+1] = NaN
+                end
                 count += 1
         end
 end
-Plots.quiver(X,Y,quiver=(U,V))
+#Plots.quiver(X,Y,quiver=(U,V))
+
+clf()
+fig = PyPlot.figure("pyplot_streamplot", figsize=(10,10))
+PyPlot.streamplot(x1',y1',u1',v1',arrowsize=2,color="k",density=1.2,linewidth=3)
+PyPlot.xlabel("Cooperators (x)", fontsize=20)
+PyPlot.ylabel("Defectors (y)", fontsize=20)
+PyPlot.title(string("Flow diagram for stern judging with ", 100*η, "% error "), fontsize=20)
+PyPlot.tick_params(axis="both", labelsize=20)
+# PyPlot.xlim(0, 1)
+# PyPlot.ylim(0, 1)
+display(fig)
 
 plot(output[:,1],output[:,2],group=output[:,3],seriestype = :scatter,xlims=(0,1),ylims=(0,1))
 plot!(output[:,1][output[:,3].==1],output[:,2][output[:,3].==1],seriestype = :scatter,xlims=(0,1),ylims=(0,1))

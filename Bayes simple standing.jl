@@ -5,18 +5,20 @@ using DifferentialEquations, NLsolve, Plots, PyCall, PyPlot
 # Specifically, Ocg=P(G|→G), Ocb=P(G|→B), Odg=P(G|↛G), and  Odb=P(G|↛B).
 
 # Parameters
-e₁ = 0.01
-e₂ = 0.01
+e₁ = 0.05
+e₂ = 0.05
 ϵ = (1-e₁)*(1-e₂) + e₁*e₂
 e = e₂
 r = 3
-τ = 1000
-T = 100
+τ = 1
+T = 10000
 tspan = (0.0,T)
 
 function simpstand!(du,u,p,t)
         g = u[1]*u[4] + u[2]*u[5] + u[3]*u[6]
-        g2 = u[1]*u[4]^2 + u[2]*u[5]^2 + u[3]*u[6]^2
+        g2 = u[1]*u[7] + u[2]*u[8] + u[3]*u[9]
+
+        #g2 = u[1]*u[4]^2 + u[2]*u[5]^2 + u[3]*u[6]^2
         #Imitation dynamics: u[1]-u[3]
         Px = r*(u[1] + u[3]*u[4]) - 1
         Py = r*(u[1] + u[3]*u[5])
@@ -31,8 +33,8 @@ function simpstand!(du,u,p,t)
         Odg = (1 - ϵ)*g/((1 - ϵ)*g + (1 - e)*(1 - g))
         Icg = ϵ*Ocg + (1 - ϵ)*Odg
         Idg = (1 - e)*Odg + e*Ocg
-        Icb = 1 # ϵ*Ocb + (1 - ϵ)*Odb = 1, since Ocb = Odb = 1
-        Idb = 1 # (1 - e)*Odb + e*Ocb = 1, since Ocb = Odb = 1
+        # Icb = 1 # ϵ*Ocb + (1 - ϵ)*Odb = 1, since Ocb = Odb = 1
+        # Idb = 1 # (1 - e)*Odb + e*Ocb = 1, since Ocb = Odb = 1
         gx₊ = (1 - u[4])*(Icg*g + 1-g)
         gx₋ = u[4]*(1 - Icg)*g
         gx2₊ = (u[4] - u[7])*(Icg*g + 1-g)
@@ -54,7 +56,7 @@ function simpstand!(du,u,p,t)
 end
 
 # Numerically solve for different initial conditions to find equilibria.
-numsims = 10
+numsims = 5
 numEq = zeros((numsims+1)^2,4)
 count = 1
 for m = 0:1:numsims
@@ -91,37 +93,42 @@ plot!(numEq[:,1][numEq[:,3].==0],numEq[:,2][numEq[:,3].==0],seriestype = :scatte
 numEq = hcat(numEq[:,1],numEq[:,3],numEq[:,2],numEq[:,4])
 
 # Plot paths in phase space.
-plot()
-for m = 0:5:100
+Plots.plot()
+for m = 0:1:100
         x = m/100
-        for n = 0:5:100-m
-                y = n/100
+        #for n = 0:1:10-m
+        y=0.001
                 z = 1-x-y
+                #y=0
+                #z = 1-x-y
                 # for gx = 0:0.25:1
                 #         for gy = 0:0.25:1
                 #                 for gz = 0:0.25:1
                                         # further initial conditions
+                                        Plots.plot()
                                         gx=rand()
-                                        gy=rand()
+                                        gy=0#rand()
                                         gz=rand()
                                         gx2=gx*rand()
-                                        gy2=gy*rand()
+                                        gy2=0#gy*rand()
                                         gz2=gz*rand()
-                                        x=0.9
-                                        y=0.0#rand()
-                                        z=0.1
-                                        u₀ = [0.01;0.01;0.98;0;0;0.5;0;0;0.25]
+                                         x=rand()
+                                         y=0#rand()#rand()
+                                         z=rand()
+                                        #u₀ = [0.01;0.01;0.98;0;0;0.5;0;0;0.25]
 
                                         divisor = x+y+z
                                         u₀ = [x/divisor;y/divisor;z/divisor;gx;gy;gz;gx2;gy2;gz2]
-                                        prob = ODEProblem(simpstand!,u₀,(0.0,20))
+                                        prob = ODEProblem(simpstand!,u₀,(0.0,500000000000))
                                         sol = solve(prob)
-                                        Plots.plot(sol,vars = [(0,1), (0,2), (0,3)])
-                                        plot(sol[1,:],sol[2,:],xlims=(0,1),ylims=(0,1),arrow=true,linewidth = 2,legend=false)
+                                        # sol[end]
+                                        # sol[5,end]^2 - sol[8,end]
+                                        Plots.plot(sol,vars = [(0,1),(0,2),(0,3)],ylims = (0,1))
+                                        #plot(sol[1,:],sol[2,:],xlims=(0,1),ylims=(0,1),arrow=true,linewidth = 2,legend=false)
                 #                 end
                 #         end
                 # end
-        end
+        #end
 end
 current()
 
@@ -140,7 +147,7 @@ tax.get_axes().axis("off")
 numEq_stable = numEq[:,1:3][numEq[:,4].==0,:]
 numEq_unstable = numEq[:,1:3][numEq[:,4].==1,:]
 
-tax.scatter(numEq_unstable, linewidths=10, color="orangered", marker="o")
+tax.scatter(numEq_stable, linewidths=10, color="orangered", marker="o")
 tax.show()
 gcf()
 tax.savefig("simpstand_ternary")
