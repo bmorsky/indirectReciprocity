@@ -10,8 +10,8 @@ e₂ = 0.01
 ϵ = (1-e₁)*(1-e₂) + e₁*e₂
 e = e₂
 r = 3
-τ = 1e8
-tspan = (0.0,20000)
+τ = 100
+tspan = (0.0,2000)
 
 function imgscore!(du,u,p,t)
         g = u[1]*u[4] + u[2]*u[5] + u[3]*u[6]
@@ -52,12 +52,24 @@ for m = 0:1:50
                 #         for gy = 0:0.25:1
                 #                 for gz = 0:0.25:1
                                         # further initial conditions
+                                        x=0.5#rand()
+                                        y=0.3#rand()
+                                        z=0.2#rand()
+                                        divisor=x+y+z
+                                        x=x/divisor
+                                        y=y/divisor
+                                        z=z/divisor
+                                        # x=0.2#1/3#rand()
+                                        # y=0.3#1/3#rand()
+                                        # z=0.5#1/3#rand()
                                         gx=0.5
                                         gy=0.5
                                         gz=0.5
                                         u₀ = [x;y;z;gx;gy;gz]
                                         prob = ODEProblem(imgscore!,u₀,tspan)
                                         sol = solve(prob)
+                                        sol[:,end]
+                                        plot(sol)
                                         output[count,1:3] = sol[1:3,end]
                                         if all(abs.(u₀[1:3] .- sol[1:3,end]) .< 0.01)
                                                 global output[count,4] = 1
@@ -68,6 +80,36 @@ for m = 0:1:50
                 # end
         end
 end
+numEq = output
+numEq = hcat(numEq[:,1],numEq[:,3],numEq[:,2],numEq[:,4])
+
+current()
+
+# Plot ternary figure
+ternary = pyimport("ternary")
+# Boundary and gridlines
+figure, tax = ternary.figure(scale=1.0)
+# Draw boundary and gridlines
+tax.boundary(linewidth=2.0)
+tax.right_corner_label(" AllC", fontsize=20)
+tax.top_corner_label("Disc", fontsize=20)
+tax.left_corner_label("AllD ", fontsize=20)
+tax.get_axes().axis("off")
+#numEq[:,1:3][numEq[:,4].==0,:]
+
+numEq_stable = numEq[:,1:3][numEq[:,4].==0,:]
+numEq_unstable = numEq[:,1:3][numEq[:,4].==1,:]
+
+tax.scatter(numEq_stable, linewidths=10, color="blue", marker="o")
+tax.show()
+gcf()
+tax.savefig("test_scoring_ternary")
+clf()
+
+
+
+
+
 plot(output[:,1],output[:,2],group=output[:,3],seriestype = :scatter,xlims=(0,1),ylims=(0,1))
 plot!(output[:,1][output[:,3].==1],output[:,2][output[:,3].==1],seriestype = :scatter,xlims=(0,1),ylims=(0,1))
 plot!(output[:,1][output[:,3].==0],output[:,2][output[:,3].==0],seriestype = :scatter,xlims=(0,1),ylims=(0,1))
@@ -89,14 +131,27 @@ for m = 0:5:100
                                         x=rand()
                                         y=rand()
                                         z=rand()
+
+                                        function σ_f(du,u,p,t)
+                                          du[1] = 0.0001*u[1]
+                                          du[2] = 0.0001*u[2]
+                                          du[3] = 0.0001*u[3]
+                                          du[4] = 0.001*u[4]
+                                          du[5] = 0.001*u[5]
+                                          du[6] = 0.001*u[6]
+                                        end
+
+
                                         divisor = x+y+z
                                         x/divisor
                                         y/divisor
                                         z/divisor
                                         u₀ = [x/divisor;y/divisor;z/divisor;gx;gy;gz]
-                                        prob = ODEProblem(imgscore!,u₀,(0.0,500))
+
+                                        prob = ODEProblem(imgscore!,u₀,(0.0,5000))
                                         sol = solve(prob)
                                         sol[:,end]
+                                        Plots.plot(sol)
                                         Plots.plot(sol,vars = [(0,1), (0,2), (0,3)])
                                         plot!(sol[1,:],sol[2,:],xlims=(0,1),ylims=(0,1),arrow=true,linewidth = 2,legend=false)
                 #                 end
@@ -368,15 +423,17 @@ for m = 1:1:1000
                 gx₋ = u[2]*(1 - Icg)
                 gy₊ = (1 - u[3])*Idg
                 gy₋ = u[3]*(1 - Idg)
-                gz₊ = (1 - u[4])*(Icg*g + Idg*(x*(1 - u[2]) + (1-u[1]-x)*(1 - u[3]) + u[1]*(1 - u[4])))
-                gz₋ = u[4]*((1 - Icg)*g + (1 - Idg)*(x*(1 - u[2]) + (1-u[1]-x)*(1 - u[3]) + u[1]*(1 - u[4])))
+                gz₊ = (1 - u[4])*(Icg*g + Idg*(1-g))
+                gz₋ = u[4]*((1 - Icg)*g + (1 - Idg)*(1-g))
 
                 F[1] = u[1]*(Pz - P̄)
-                F[2] = τ*(gx₊ - gx₋)
-                F[3] = τ*(gy₊ - gy₋)
-                F[4] = τ*(gz₊ - gz₋)
+                F[2] = (Icg - u[2])
+                F[3] = (Idg - u[3])
+                F[4] = (Icg*g + Idg*(1-g) - u[4])
+                F[5] = x*(Px - P̄)
+                F[6] = (1-u[1]-x)*(Py - P̄)
         end
-        result = nlsolve(ww!, [(1-x)/2; 0.5; 0.5; 0.5], method = :newton)
+        result = nlsolve(ww!, [(1-x)*0.5; 0.5; 0.5; 0.5; x; (1-x)*0.5])
         EQ[m,:] = [x result.zero[1] 1-result.zero[1]-x]
 end
 
@@ -398,7 +455,7 @@ for m=1:1:size(EQ1,1)
 end
 
 ## Boundary and Gridlines
-clf()
+# clf()
 figure, tax = ternary.figure(scale=1.0)
 
 # Draw Boundary and Gridlines
@@ -411,6 +468,6 @@ tax.get_axes().axis("off")
 tax.scatter(EQ1, linewidth=1.0, color="black")
 tax.show()
 gcf()
-
+tax.savefig("imagescore_ternary")
 
 #output_e₃[:,1:3][output_e₃[:,4].==0,:]

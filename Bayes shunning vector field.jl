@@ -5,7 +5,7 @@ using DifferentialEquations, Plots, PyCall, PyPlot
 #Specifically, Ocg=P(good|→G), Ocb=P(good|→B), Odg=P(G|↛G), and Odb=P(G|↛B).
 
 #Parameters
-η = 0.1
+η = 0.01
 e₁ = η
 e₂ = η
 ϵ = (1-e₁)*(1-e₂) + e₁*e₂
@@ -14,7 +14,7 @@ r = 3
 τ = 1
 tspan = (0.0,100)
 
-M=5
+M=20
 X=zeros(Int((M+2)*(M+1)/2))
 Y=zeros(Int((M+2)*(M+1)/2))
 U=zeros(Int((M+2)*(M+1)/2))
@@ -30,19 +30,15 @@ x1 = zeros(M+1,M+1)
 y1 = zeros(M+1,M+1)
 u1 = zeros(M+1,M+1)
 v1 = zeros(M+1,M+1)
+count = 1
+
+# out = zeros(21,2)
 
 for m = 0:1:M
         x = m/M
-        for n = 0:1:M
+        for n = 0:1:M-m
                 y = n/M
                 z = 1-x-y
-                x=0#rand()
-                y=rand()
-                z=rand()
-                divisor=x+y+z
-                x=x/divisor
-                y=y/divisor
-                z=z/divisor
                 function f!(du,u,p,t)
                         g = x*u[1] + y*u[2] + z*u[3]
                         g2 = x*u[4] + y*u[5] + z*u[6]
@@ -52,32 +48,18 @@ for m = 0:1:M
                         Odg = (1 - ϵ)*g/((1 - ϵ)*g + (1 - e)*(1 - g))
                         Icg = ϵ*Ocg + (1 - ϵ)*Odg
                         Idg = (1 - e)*Odg + e*Ocg
-                        Icb = 0 # ϵ*Ocb + (1 - ϵ)*Odb = 0, since Ocb = Odb = 0
-                        Idb = 0 # (1 - e)*Odb + e*Ocb = 0, since Ocb = Odb = 0
-                        # gx₊ = (1 - u[1])*Icg*g
-                        # gx₋ = u[1]*((1 - Icg)*g + 1-g)
-                        # gx2₊ = (u[1] - u[4])*Icg*g
-                        # gx2₋ = u[4]*((1 - Icg)*g + 1-g)
-                        # gy₊ = (1 - u[2])*Idg*g
-                        # gy₋ = u[2]*((1 - Idg)*g + 1-g)
-                        # gy2₊ = (u[2] - u[5])*Idg*g
-                        # gy2₋ = u[5]*((1 - Idg)*g + 1-g)
-                        # gz₊ = (1 - u[3])*(Icg*g2 + (g-g2)*Idg)
-                        # gz₋ = u[3]*((1-Icg)*g2 + (g-g2)*(1-Idg) + 1-g)
-                        # gz2₊ = (u[3] - u[6])*(Icg*g2 + (g-g2)*Idg)
-                        # gz2₋ = u[6]*((1-Icg)*g2 + (g-g2)*(1-Idg) + 1-g)
-                        gx₊ = (1 - u[1])*(Icg*g + Icb*(1-g))
-                        gx₋ = u[1]*((1-Icg)*g + (1-Icb)*(1-g))
-                        gx2₊ = (u[1] - u[4])*(Icg*g + Icb*(1-g))
-                        gx2₋ = u[4]*((1-Icg)*g + (1-Icb)*(1-g))
-                        gy₊ = (1 - u[2])*(Idg*g + Idb*(1-g))
-                        gy₋ = u[2]*((1-Idg)*g + (1-Idb)*(1-g))
-                        gy2₊ = (u[2] - u[5])*(Idg*g + Idb*(1-g))
-                        gy2₋ = u[5]*((1-Idg)*g + (1-Idb)*(1-g))
-                        gz₊ = (1 - u[3])*(Icg*g2 + (g-g2)*Idg + Icb*(1-g))
-                        gz₋ = u[3]*((1-Icg)*g2 + (g-g2)*(1-Idg) + (1-Icb)*(1-g))
-                        gz2₊ = (u[3] - u[6])*(Icg*g2 + (g-g2)*Idg + Icb*(1-g))
-                        gz2₋ = u[6]*((1-Icg)*g2 + (g-g2)*(1-Idg) + (1-Icb)*(1-g))
+                        gx₊ = (1 - u[1])*Icg*g
+                        gx₋ = u[1]*((1-Icg)*g + 1-g)
+                        gx2₊ = (u[1] - u[4])*Icg*g
+                        gx2₋ = u[4]*((1-Icg)*g + 1-g)
+                        gy₊ = (1 - u[2])*Idg*g
+                        gy₋ = u[2]*((1-Idg)*g + 1-g)
+                        gy2₊ = (u[2] - u[5])*Idg*g
+                        gy2₋ = u[5]*((1-Idg)*g + 1-g)
+                        gz₊ = (1 - u[3])*(Icg*g2 + (g-g2)*Idg)
+                        gz₋ = u[3]*((1-Icg)*g2 + (g-g2)*(1-Idg) + 1-g)
+                        gz2₊ = (u[3] - u[6])*(Icg*g2 + (g-g2)*Idg)
+                        gz2₋ = u[6]*((1-Icg)*g2 + (g-g2)*(1-Idg) + 1-g)
                         du[1] = gx₊ - gx₋
                         du[2] = gy₊ - gy₋
                         du[3] = gz₊ - gz₋
@@ -93,34 +75,42 @@ for m = 0:1:M
                 gy2=gy*rand()
                 gz2=gz*rand()
                 u₀ = [gx;gy;gz;gx2;gy2;gz2]
+                u₀ = [0.5;0.5;0.5;0.25;0.25;0.25]
                 prob = ODEProblem(f!,u₀,tspan)
                 sol = solve(prob)
-                # sol[end]
-                Plots.plot(sol)
+
                 (gx, gy, gz) = sol[1:3,end]
+                #
+
+                g = x*gx + y*gy + z*gz
+                # g2 = x*gx^2 + y*gy^2 + z*gz^2
+                # gz=(1-g)*(1-e) + g2*ϵ + (g-g2)*e
                 Px = r*(x + z*gx) - 1
                 Py = r*(x + z*gy)
-                Pz = r*(x + z*gz) - x*gx - y*gy - z*gz
+                Pz = r*(x + z*gz) - g
                 P̄ = x*Px + y*Py + z*Pz
-                # X[count] = x
-                # Y[count] = y
+                X[count] = x
+                Y[count] = y
                 dx = x*(Px - P̄)
                 dy = y*(Py - P̄)
-                norm = sqrt((dx-x)^2 + (dy-y)^2)
-                # U[count] = dx/norm
-                # V[count] = dy/norm
-                x1[m+1,n+1] = x
-                y1[m+1,n+1] = y
-                u1[m+1,n+1] = dx/norm
-                v1[m+1,n+1] = dy/norm
-                if x+y>1
-                        u1[m+1,n+1] = NaN
-                        v1[m+1,n+1] = NaN
-                end
+                norm = sqrt((dx-x)^2 + (dy-y)^2)/10
+                U[count] = dx
+                V[count] = dy
+
+                # x1[m+1,n+1] = x
+                # y1[m+1,n+1] = y
+                # u1[m+1,n+1] = dx#/norm
+                # v1[m+1,n+1] = dy#/norm
+                # if x+y>1
+                #         u1[m+1,n+1] = NaN
+                #         v1[m+1,n+1] = NaN
+                # end
+                # out[count,:] = [y,r*(gy-gz)+gy*y+gz*z]
                 count += 1
         end
 end
-#Plots.quiver(X,Y,quiver=(U,V))
+Plots.quiver(X,Y,quiver=(U,V))
+
 
 clf()
 fig = PyPlot.figure("pyplot_streamplot", figsize=(10,10))
@@ -149,14 +139,17 @@ for m = 0:5:100
                 #                 for gz = 0:0.25:1
                                         # further initial conditions
                                         gx=rand()
-                                        gy=rand()
+                                        gy=0
                                         gz=rand()
+                                        gx2=gx*rand()
+                                        gy2=gy*rand()
+                                        gz2=gz*rand()
                                         x=rand()
-                                        y=rand()
+                                        y=0
                                         z=rand()
                                         divisor = x+y+z
-                                        u₀ = [x/divisor;y/divisor;z/divisor;gx;gy;gz]
-                                        prob = ODEProblem(imgscore!,u₀,(0.0,100000000))
+                                        u₀ = [x/divisor;y/divisor;z/divisor;gx;gy;gz;gx2;gy2;gz2]
+                                        prob = ODEProblem(shunning!,u₀,(0.0,100))
                                         sol = solve(prob)
                                         Plots.plot(sol)
                                         plot!(sol[1,:],sol[2,:],xlims=(0,1),ylims=(0,1),arrow=true,linewidth = 2,legend=false)

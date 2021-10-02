@@ -10,7 +10,7 @@ e₂ = 0.01
 ϵ = (1-e₁)*(1-e₂) + e₁*e₂
 e = e₂
 r = 3
-τ = 1000000
+τ = 100
 T = 100
 tspan = (0.0,T)
 
@@ -70,15 +70,21 @@ for m = 0:1:numsims
                 #         for gy = 0:0.25:1
                 #                 for gz = 0:0.25:1
                                         # further initial conditions
+
+                                        x=rand()
+                                        y=rand()
+                                        z=rand()
+                                        divisor = x+y+z
                                         gx=0.5
                                         gy=0.5
                                         gz=0.5
                                         gx2=0.25
                                         gy2=0.25
                                         gz2=0.25
-                                        u₀ = [x;y;z;gx;gy;gz;gx2;gy2;gz2]
+                                        u₀ = [x/divisor;y/divisor;z/divisor;gx;gy;gz;gx2;gy2;gz2]
                                         prob = ODEProblem(sternjudge!,u₀,tspan)
                                         sol = solve(prob)
+                                        Plots.plot(sol)
                                         numEq[count,1:3] = sol[1:3,end]
                                         if all(abs.(u₀[1:3] .- sol[1:3,end]) .< 0.01)
                                                 global numEq[count,4] = 1

@@ -10,13 +10,13 @@ e₂ = 0.01
 ϵ = (1-e₁)*(1-e₂) + e₁*e₂
 e = e₂
 r = 3
-τ = 10000
-T = 2000
+τ = 100
+T = 200
 tspan = (0.0,T)
 
 function shunning!(du,u,p,t)
         g = u[1]*u[4] + u[2]*u[5] + u[3]*u[6]
-        g2 = u[1]*u[4]^2 + u[2]*u[5]^2 + u[3]*u[6]^2
+        g2 = u[1]*u[7] + u[2]*u[8] + u[3]*u[9]
         #Imitation dynamics: u[1]-u[3]
         Px = r*(u[1] + u[3]*u[4]) - 1
         Py = r*(u[1] + u[3]*u[5])
@@ -31,8 +31,6 @@ function shunning!(du,u,p,t)
         Odg = (1 - ϵ)*g/((1 - ϵ)*g + (1 - e)*(1 - g))
         Icg = ϵ*Ocg + (1 - ϵ)*Odg
         Idg = (1 - e)*Odg + e*Ocg
-        Icb = 0 # ϵ*Ocb + (1 - ϵ)*Odb = 0, since Ocb = Odb = 0
-        Idb = 0 # (1 - e)*Odb + e*Ocb = 0, since Ocb = Odb = 0
         gx₊ = (1 - u[4])*Icg*g
         gx₋ = u[4]*((1 - Icg)*g + 1-g)
         gx2₊ = (u[4] - u[7])*Icg*g
@@ -123,6 +121,27 @@ for m = 0:5:100
 end
 current()
 
+out = zeros(101,3,10)
+gx=0.5
+gy=0.5
+gz=0.5
+gx2=0.25
+gy2=0.25
+gz2=0.25
+for m = 0:1:4
+        x = 0.8*m/4 + (1-m/4) - 0.005
+        y = 1 - x - 0.01
+        z = 1 - x - 0.01
+        u₀ = [x;y;0.01;gx;gy;gz;gx2;gy2;gz2]
+        prob = ODEProblem(shunning!,u₀,(0.0,1000.0),saveat=10)
+        sol = solve(prob)
+        out[:,:,m+1] = sol[1:3,:]'
+        u₀ = [x;0.01;z;gx;gy;gz;gx2;gy2;gz2]
+        prob = ODEProblem(shunning!,u₀,(0.0,1000.0),saveat=10)
+        sol = solve(prob)
+        out[:,:,2*(m+1)] = sol[1:3,:]'
+end
+
 # Plot ternary figure
 ternary = pyimport("ternary")
 # Boundary and gridlines
@@ -134,6 +153,9 @@ tax.top_corner_label("Disc", fontsize=20)
 tax.left_corner_label("AllD ", fontsize=20)
 tax.get_axes().axis("off")
 #numEq[:,1:3][numEq[:,4].==0,:]
+for m=1:10
+        tax.plot(out[:,:,m], color="black")
+end
 tax.scatter(numEq[:,1:3][numEq[:,4].==0,:], linewidths=10, color="orangered", marker="o")
 tax.show()
 gcf()

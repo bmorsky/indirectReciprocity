@@ -5,14 +5,14 @@ using DifferentialEquations, Plots, PyCall, PyPlot
 #Specifically, Ocg=P(good|→G), Ocb=P(good|→B), Odg=P(G|↛G), and Odb=P(G|↛B).
 
 #Parameters
-η = 0.0000001
+η = 0.1
 e₁ = η
 e₂ = η
-ϵ = (1-e₁)*(1-e₂) + e₁*e₂
+ϵ = 0.99#(1-e₁)*(1-e₂) + e₁*e₂
 e = e₂
 r = 3
 τ = 1000
-tspan = (0.0,100)
+tspan = (0.0,10000)
 
 M=20
 X=zeros(Int((M+2)*(M+1)/2))
@@ -36,18 +36,26 @@ for m = 0:1:M
         for n = 0:1:M
                 y = n/M
                 z = 1-x-y
+                x=0.5#rand()
+                y=0.2#rand()
+                z=0.3#rand()
+                divisor=x+y+z
+                x=x/divisor
+                y=y/divisor
+                z=z/divisor
+
                 function f!(du,u,p,t)
                         g = x*u[1] + y*u[2] + z*u[3]
                         g2 = x*u[4] + y*u[5] + z*u[6]
-                        b = x*(1-u[1]) + y*(1-u[2]) + z*(1-u[3])
-                        b2 = 1 - 2*g + g2
+                        # b = x*(1-u[1]) + y*(1-u[2]) + z*(1-u[3])
+                        # b2 = 1 - 2*g + g2
                         # Reputation dynamics: u[4]-u[6]
                         # Reputation dynamics: u[4]-u[6]
                         # Reputation dynamics: u[4]-u[6]
                         Ocg = ϵ*g/(ϵ*g + e*(1 - g))
-                        Ocb = e*g/(e*g + (1-e)*(1-g))
+                        Ocb = e*g/(e*g + ϵ*(1-g)) #(1-e)*(1-g)
                         Odg = (1 - ϵ)*g/((1 - ϵ)*g + (1 - e)*(1 - g))
-                        Odb = (1-e)*g/((1-e)*g + e*(1-g))
+                        Odb = (1-e)*g/((1-e)*g + (1-ϵ)*(1-g))
                         Icg = ϵ*Ocg + (1 - ϵ)*Odg
                         Idg = (1 - e)*Odg + e*Ocg
                         Icb = ϵ*Ocb + (1 - ϵ)*Odb
@@ -60,10 +68,10 @@ for m = 0:1:M
                         gy₋ = u[2]*((1-Idg)*g + (1-Idb)*(1-g))
                         gy2₊ = (u[2] - u[5])*(Idg*g + Idb*(1-g))
                         gy2₋ = u[5]*((1-Idg)*g + (1-Idb)*(1-g))
-                        gz₊ = (1 - u[3])*(Icg*g2 + (g-g2)*Idg + b2*Idb + (b-b2)*Icb)
-                        gz₋ = u[3]*((1-Icg)*g2 + (g-g2)*(1-Idg) + b2*(1-Idb) + (b-b2)*(1-Icb))
-                        gz2₊ = (u[3] - u[6])*(Icg*g2 + (g-g2)*Idg + b2*Idb + (b-b2)*Icb)
-                        gz2₋ = u[6]*((1-Icg)*g2 + (g-g2)*(1-Idg) + b2*(1-Idb) + (b-b2)*(1-Icb))
+                        gz₊ = (1 - u[3])*(Icg*g2 + (g-g2)*(Idg+Icb) + (1-2*g+g2)*Idb)
+                        gz₋ = u[3]*((1-Icg)*g2 + (g-g2)*(2-Idg-Icb) + (1-2*g+g2)*(1-Idb))
+                        gz2₊ = (u[3] - u[6])*(Icg*g2 + (g-g2)*(Idg+Icb) + (1-2*g+g2)*Idb)
+                        gz2₋ = u[6]*((1-Icg)*g2 + (g-g2)*(2-Idg-Icb) + (1-2*g+g2)*(1-Idb))
                         du[1] = gx₊ - gx₋
                         du[2] = gy₊ - gy₋
                         du[3] = gz₊ - gz₋
@@ -140,7 +148,7 @@ for m = 0:5:100
                                         z=rand()
                                         divisor = x+y+z
                                         u₀ = [x/divisor;y/divisor;z/divisor;gx;gy;gz]
-                                        prob = ODEProblem(imgscore!,u₀,(0.0,100000000))
+                                        prob = ODEProblem(imgscore!,u₀,(0.0,100))
                                         sol = solve(prob)
                                         Plots.plot(sol)
                                         plot!(sol[1,:],sol[2,:],xlims=(0,1),ylims=(0,1),arrow=true,linewidth = 2,legend=false)
