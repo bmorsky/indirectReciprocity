@@ -3,10 +3,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[         0,          0]
-NotebookDataLength[    214513,       6369]
-NotebookOptionsPosition[    211392,       6300]
-NotebookOutlinePosition[    211786,       6316]
-CellTagsIndexPosition[    211743,       6313]
+NotebookDataLength[    215124,       6372]
+NotebookOptionsPosition[    212002,       6303]
+NotebookOutlinePosition[    212397,       6319]
+CellTagsIndexPosition[    212354,       6316]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -135,15 +135,13 @@ Cell[BoxData[{
            "textoffset"}]}], "}"}]}], "]"}], "]"}]}], "}"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{
-  "SetDirectory", "[", 
-   "\"\</Users/brycemorsky/Desktop/New projects/Indirect \
-reciprocity/figures\>\"", "]"}], ";"}]}], "Input",
+  RowBox[{"SetDirectory", "[", "\"\</results\>\"", "]"}], ";"}]}], "Input",
  CellChangeTimes->{{3.901800394099544*^9, 3.901800394655294*^9}, {
-  3.9018015011279984`*^9, 3.901801501293923*^9}},
- CellLabel->
-  "In[587]:=",ExpressionUUID->"f144eb03-4b76-41e7-953c-bb0a3325b1b9"]
-}, Closed]],
+   3.9018015011279984`*^9, 3.901801501293923*^9}, 3.902829582914216*^9, {
+   3.916851779447083*^9, 3.916851779837764*^9}, {3.9168528447420607`*^9, 
+   3.91685284668303*^9}},ExpressionUUID->"f144eb03-4b76-41e7-953c-\
+bb0a3325b1b9"]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -271,7 +269,7 @@ Cell[BoxData[{
    RowBox[{"Array", "[", 
     RowBox[{"m", ",", 
      RowBox[{"{", 
-      RowBox[{"66", ",", "5"}], "}"}]}], "]"}]}], 
+      RowBox[{"861", ",", "5"}], "}"}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"count", "=", "1"}], ";"}], "\[IndentingNewLine]", 
@@ -288,9 +286,9 @@ Cell[BoxData[{
            RowBox[{"{", 
             RowBox[{
              RowBox[{"x", "\[Rule]", 
-              RowBox[{"0.1", "*", "i"}]}], ",", 
+              RowBox[{"0.025", "*", "i"}]}], ",", 
              RowBox[{"y", "\[Rule]", 
-              RowBox[{"0.1", "*", "j"}]}]}], "}"}]}], ",", 
+              RowBox[{"0.025", "*", "j"}]}]}], "}"}]}], ",", 
           RowBox[{"{", 
            RowBox[{
             RowBox[{
@@ -310,8 +308,8 @@ Cell[BoxData[{
        RowBox[{"[", "count", "]"}], "]"}], "=", " ", 
       RowBox[{"{", 
        RowBox[{
-        RowBox[{"0.1", "*", "i"}], ",", 
-        RowBox[{"0.1", "*", "j"}], ",", 
+        RowBox[{"0.025", "*", "i"}], ",", 
+        RowBox[{"0.025", "*", "j"}], ",", 
         RowBox[{
          RowBox[{"gx", "[", "100", "]"}], "/.", 
          RowBox[{"R", "[", 
@@ -328,10 +326,10 @@ Cell[BoxData[{
      RowBox[{"count", "=", 
       RowBox[{"count", "+", "1"}]}], ";"}], "\[IndentingNewLine]", ",", 
     RowBox[{"{", 
-     RowBox[{"i", ",", "0", ",", "10"}], "}"}], ",", 
+     RowBox[{"i", ",", "0", ",", "40"}], "}"}], ",", 
     RowBox[{"{", 
      RowBox[{"j", ",", "0", ",", 
-      RowBox[{"10", "-", "i"}]}], "}"}]}], "]"}], 
+      RowBox[{"40", "-", "i"}]}], "}"}]}], "]"}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"pix", "=", 
@@ -743,50 +741,72 @@ Cell[BoxData[{
             RowBox[{"1", ",", "0"}], "]"}], ",", "diskradius"}], "]"}]}], 
         "}"}], "]"}], ",", " ", 
       RowBox[{"(*", " ", "AllC", " ", "*)"}], "\[IndentingNewLine]", 
-      RowBox[{"Graphics", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"EdgeForm", "[", 
-          RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
-         RowBox[{"CapForm", "[", "\"\<Round\>\"", "]"}], ",", 
-         RowBox[{"Thickness", "[", 
-          RowBox[{"diskradius", "+", 
-           RowBox[{"thickness", "*", "2"}]}], "]"}], ",", 
-         RowBox[{"EdgeForm", "[", "Blue", "]"}], ",", "Blue", ",", 
-         RowBox[{"Line", "[", 
+      RowBox[{"(*", 
+       RowBox[{
+        RowBox[{"Graphics", "[", 
+         RowBox[{"{", 
           RowBox[{
-           RowBox[{
-            RowBox[{"TernCoords", "[", 
-             RowBox[{"#1", ",", "#2"}], "]"}], "&"}], "@@@", 
-           RowBox[{"{", 
+           RowBox[{"EdgeForm", "[", 
+            RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
+           RowBox[{"CapForm", "[", "\"\<Round\>\"", "]"}], ",", 
+           RowBox[{"Thickness", "[", 
+            RowBox[{"diskradius", "+", 
+             RowBox[{"thickness", "*", "2"}]}], "]"}], ",", 
+           RowBox[{"EdgeForm", "[", "Blue", "]"}], ",", "Blue", ",", 
+           RowBox[{"Line", "[", 
             RowBox[{
+             RowBox[{
+              RowBox[{"TernCoords", "[", 
+               RowBox[{"#1", ",", "#2"}], "]"}], "&"}], "@@@", 
              RowBox[{"{", 
-              RowBox[{"0", ",", "1"}], "}"}], ",", 
-             RowBox[{"{", 
-              RowBox[{"0", ",", "0.66"}], "}"}]}], "}"}]}], "]"}]}], "}"}], 
-       "]"}], ",", "\[IndentingNewLine]", 
-      RowBox[{"Graphics", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"EdgeForm", "[", 
-          RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
-         RowBox[{"CapForm", "[", "\"\<Round\>\"", "]"}], ",", 
-         RowBox[{"Thickness", "[", 
-          RowBox[{"diskradius", "+", 
-           RowBox[{"thickness", "*", "2"}]}], "]"}], ",", 
-         RowBox[{"EdgeForm", "[", "Blue", "]"}], ",", "Blue", ",", 
-         RowBox[{"Line", "[", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"0", ",", "1"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"0", ",", "0.66"}], "}"}]}], "}"}]}], "]"}]}], "}"}], 
+         "]"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"Graphics", "[", 
+         RowBox[{"{", 
           RowBox[{
-           RowBox[{
-            RowBox[{"TernCoords", "[", 
-             RowBox[{"#1", ",", "#2"}], "]"}], "&"}], "@@@", 
-           RowBox[{"{", 
+           RowBox[{"EdgeForm", "[", 
+            RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
+           RowBox[{"CapForm", "[", "\"\<Round\>\"", "]"}], ",", 
+           RowBox[{"Thickness", "[", 
+            RowBox[{"diskradius", "+", 
+             RowBox[{"thickness", "*", "2"}]}], "]"}], ",", 
+           RowBox[{"EdgeForm", "[", "Blue", "]"}], ",", "Blue", ",", 
+           RowBox[{"Line", "[", 
             RowBox[{
+             RowBox[{
+              RowBox[{"TernCoords", "[", 
+               RowBox[{"#1", ",", "#2"}], "]"}], "&"}], "@@@", 
              RowBox[{"{", 
-              RowBox[{"0", ",", "0"}], "}"}], ",", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"0", ",", "0"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"0", ",", "0.66"}], "}"}]}], "}"}]}], "]"}]}], "}"}], 
+         "]"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"Graphics", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"EdgeForm", "[", 
+            RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
+           RowBox[{"CapForm", "[", "\"\<Round\>\"", "]"}], ",", 
+           RowBox[{"Thickness", "[", "diskradius", "]"}], ",", 
+           RowBox[{"EdgeForm", "[", "Blue", "]"}], ",", "White", ",", 
+           RowBox[{"Line", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"TernCoords", "[", 
+               RowBox[{"#1", ",", "#2"}], "]"}], "&"}], "@@@", 
              RowBox[{"{", 
-              RowBox[{"0", ",", "0.66"}], "}"}]}], "}"}]}], "]"}]}], "}"}], 
-       "]"}], ",", "\[IndentingNewLine]", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"0", ",", "0"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"0", ",", "0.66"}], "}"}]}], "}"}]}], "]"}]}], "}"}], 
+         "]"}], ","}], "*)"}], "\[IndentingNewLine]", 
       RowBox[{"Graphics", "[", 
        RowBox[{"{", 
         RowBox[{
@@ -794,28 +814,6 @@ Cell[BoxData[{
           RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
          RowBox[{"CapForm", "[", "\"\<Round\>\"", "]"}], ",", 
          RowBox[{"Thickness", "[", "diskradius", "]"}], ",", 
-         RowBox[{"EdgeForm", "[", "Blue", "]"}], ",", "White", ",", 
-         RowBox[{"Line", "[", 
-          RowBox[{
-           RowBox[{
-            RowBox[{"TernCoords", "[", 
-             RowBox[{"#1", ",", "#2"}], "]"}], "&"}], "@@@", 
-           RowBox[{"{", 
-            RowBox[{
-             RowBox[{"{", 
-              RowBox[{"0", ",", "0"}], "}"}], ",", 
-             RowBox[{"{", 
-              RowBox[{"0", ",", "0.66"}], "}"}]}], "}"}]}], "]"}]}], "}"}], 
-       "]"}], ",", "\[IndentingNewLine]", 
-      RowBox[{"Graphics", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"EdgeForm", "[", 
-          RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
-         RowBox[{"CapForm", "[", "\"\<Round\>\"", "]"}], ",", 
-         RowBox[{"Thickness", "[", 
-          RowBox[{"diskradius", "+", 
-           RowBox[{"thickness", "*", "2"}]}], "]"}], ",", 
          RowBox[{"EdgeForm", "[", "Blue", "]"}], ",", "Blue", ",", 
          RowBox[{"Line", "[", 
           RowBox[{
@@ -825,20 +823,20 @@ Cell[BoxData[{
            RowBox[{"{", 
             RowBox[{
              RowBox[{"{", 
-              RowBox[{"0", ",", "1"}], "}"}], ",", 
+              RowBox[{
+               RowBox[{"-", "0.01"}], ",", "1.01"}], "}"}], ",", 
              RowBox[{"{", 
-              RowBox[{"0", ",", "0"}], "}"}]}], "}"}]}], "]"}]}], "}"}], 
-       "]"}], ",", "\[IndentingNewLine]", 
+              RowBox[{
+               RowBox[{"-", "0.01"}], ",", "0.005"}], "}"}]}], "}"}]}], 
+          "]"}]}], "}"}], "]"}], ",", "\[IndentingNewLine]", 
       RowBox[{"Graphics", "[", 
        RowBox[{"{", 
         RowBox[{
          RowBox[{"EdgeForm", "[", 
           RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
          RowBox[{"CapForm", "[", "\"\<Round\>\"", "]"}], ",", 
-         RowBox[{"Thickness", "[", 
-          RowBox[{"diskradius", "+", 
-           RowBox[{"thickness", "*", "2"}]}], "]"}], ",", 
-         RowBox[{"EdgeForm", "[", "Blue", "]"}], ",", "Blue", ",", 
+         RowBox[{"Thickness", "[", "diskradius", "]"}], ",", 
+         RowBox[{"EdgeForm", "[", "Purple", "]"}], ",", "Purple", ",", 
          RowBox[{"Line", "[", 
           RowBox[{
            RowBox[{
@@ -888,7 +886,7 @@ Cell[BoxData[{
         RowBox[{
          RowBox[{"EdgeForm", "[", 
           RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
-         RowBox[{"EdgeForm", "[", "Red", "]"}], ",", "Red", ",", 
+         RowBox[{"EdgeForm", "[", "Purple", "]"}], ",", "Purple", ",", 
          RowBox[{"Disk", "[", 
           RowBox[{
            RowBox[{"TernCoords", "[", 
@@ -900,7 +898,7 @@ Cell[BoxData[{
         RowBox[{
          RowBox[{"EdgeForm", "[", 
           RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
-         RowBox[{"EdgeForm", "[", "Red", "]"}], ",", "Red", ",", 
+         RowBox[{"EdgeForm", "[", "Purple", "]"}], ",", "Purple", ",", 
          RowBox[{"Disk", "[", 
           RowBox[{
            RowBox[{"TernCoords", "[", 
@@ -969,10 +967,13 @@ Cell[BoxData[{
    3.8981287461921473`*^9, 3.898128762575377*^9}, {3.898128801681897*^9, 
    3.898128803821319*^9}, 3.9018005233314257`*^9, 3.901800560685005*^9, {
    3.901802831127861*^9, 3.901802891283225*^9}, 3.90180301669718*^9, 
-   3.90180308247937*^9},
+   3.90180308247937*^9, {3.9168518171989*^9, 3.916851845334735*^9}, 
+   3.916851886168437*^9, {3.916851920360175*^9, 3.916851975075796*^9}, {
+   3.91685211002076*^9, 3.91685214349997*^9}, {3.916852192604179*^9, 
+   3.9168522254804497`*^9}},
  CellLabel->
-  "In[670]:=",ExpressionUUID->"426e7191-d668-4044-ba18-b8c170ef784c"]
-}, Closed]],
+  "In[1419]:=",ExpressionUUID->"426e7191-d668-4044-ba18-b8c170ef784c"]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -1558,50 +1559,72 @@ Cell[BoxData[{
           RowBox[{"TernCoords", "[", 
            RowBox[{"1", ",", "0"}], "]"}], ",", "diskradius"}], "]"}]}], 
        "}"}], "]"}], ",", "\[IndentingNewLine]", 
-     RowBox[{"Graphics", "[", 
-      RowBox[{"{", 
-       RowBox[{
-        RowBox[{"EdgeForm", "[", 
-         RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
-        RowBox[{"CapForm", "[", "\"\<Round\>\"", "]"}], ",", 
-        RowBox[{"Thickness", "[", 
-         RowBox[{"diskradius", "+", 
-          RowBox[{"thickness", "*", "2"}]}], "]"}], ",", 
-        RowBox[{"EdgeForm", "[", "Blue", "]"}], ",", "Blue", ",", 
-        RowBox[{"Line", "[", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Graphics", "[", 
+        RowBox[{"{", 
          RowBox[{
-          RowBox[{
-           RowBox[{"TernCoords", "[", 
-            RowBox[{"#1", ",", "#2"}], "]"}], "&"}], "@@@", 
-          RowBox[{"{", 
+          RowBox[{"EdgeForm", "[", 
+           RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
+          RowBox[{"CapForm", "[", "\"\<Round\>\"", "]"}], ",", 
+          RowBox[{"Thickness", "[", 
+           RowBox[{"diskradius", "+", 
+            RowBox[{"thickness", "*", "2"}]}], "]"}], ",", 
+          RowBox[{"EdgeForm", "[", "Blue", "]"}], ",", "Blue", ",", 
+          RowBox[{"Line", "[", 
            RowBox[{
+            RowBox[{
+             RowBox[{"TernCoords", "[", 
+              RowBox[{"#1", ",", "#2"}], "]"}], "&"}], "@@@", 
             RowBox[{"{", 
-             RowBox[{"0", ",", "1"}], "}"}], ",", 
-            RowBox[{"{", 
-             RowBox[{"0", ",", "0.66"}], "}"}]}], "}"}]}], "]"}]}], "}"}], 
-      "]"}], ",", "\[IndentingNewLine]", 
-     RowBox[{"Graphics", "[", 
-      RowBox[{"{", 
-       RowBox[{
-        RowBox[{"EdgeForm", "[", 
-         RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
-        RowBox[{"CapForm", "[", "\"\<Round\>\"", "]"}], ",", 
-        RowBox[{"Thickness", "[", 
-         RowBox[{"diskradius", "+", 
-          RowBox[{"thickness", "*", "2"}]}], "]"}], ",", 
-        RowBox[{"EdgeForm", "[", "Blue", "]"}], ",", "Blue", ",", 
-        RowBox[{"Line", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"0", ",", "1"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"0", ",", "0.66"}], "}"}]}], "}"}]}], "]"}]}], "}"}], 
+        "]"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"Graphics", "[", 
+        RowBox[{"{", 
          RowBox[{
-          RowBox[{
-           RowBox[{"TernCoords", "[", 
-            RowBox[{"#1", ",", "#2"}], "]"}], "&"}], "@@@", 
-          RowBox[{"{", 
+          RowBox[{"EdgeForm", "[", 
+           RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
+          RowBox[{"CapForm", "[", "\"\<Round\>\"", "]"}], ",", 
+          RowBox[{"Thickness", "[", 
+           RowBox[{"diskradius", "+", 
+            RowBox[{"thickness", "*", "2"}]}], "]"}], ",", 
+          RowBox[{"EdgeForm", "[", "Blue", "]"}], ",", "Blue", ",", 
+          RowBox[{"Line", "[", 
            RowBox[{
+            RowBox[{
+             RowBox[{"TernCoords", "[", 
+              RowBox[{"#1", ",", "#2"}], "]"}], "&"}], "@@@", 
             RowBox[{"{", 
-             RowBox[{"0", ",", "0"}], "}"}], ",", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"0", ",", "0"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"0", ",", "0.66"}], "}"}]}], "}"}]}], "]"}]}], "}"}], 
+        "]"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"Graphics", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"EdgeForm", "[", 
+           RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
+          RowBox[{"CapForm", "[", "\"\<Round\>\"", "]"}], ",", 
+          RowBox[{"Thickness", "[", "diskradius", "]"}], ",", 
+          RowBox[{"EdgeForm", "[", "Blue", "]"}], ",", "White", ",", 
+          RowBox[{"Line", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"TernCoords", "[", 
+              RowBox[{"#1", ",", "#2"}], "]"}], "&"}], "@@@", 
             RowBox[{"{", 
-             RowBox[{"0", ",", "0.66"}], "}"}]}], "}"}]}], "]"}]}], "}"}], 
-      "]"}], ",", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"0", ",", "0"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"0", ",", "0.66"}], "}"}]}], "}"}]}], "]"}]}], "}"}], 
+        "]"}], ","}], "*)"}], "\[IndentingNewLine]", 
      RowBox[{"Graphics", "[", 
       RowBox[{"{", 
        RowBox[{
@@ -1609,28 +1632,6 @@ Cell[BoxData[{
          RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
         RowBox[{"CapForm", "[", "\"\<Round\>\"", "]"}], ",", 
         RowBox[{"Thickness", "[", "diskradius", "]"}], ",", 
-        RowBox[{"EdgeForm", "[", "Blue", "]"}], ",", "White", ",", 
-        RowBox[{"Line", "[", 
-         RowBox[{
-          RowBox[{
-           RowBox[{"TernCoords", "[", 
-            RowBox[{"#1", ",", "#2"}], "]"}], "&"}], "@@@", 
-          RowBox[{"{", 
-           RowBox[{
-            RowBox[{"{", 
-             RowBox[{"0", ",", "0"}], "}"}], ",", 
-            RowBox[{"{", 
-             RowBox[{"0", ",", "0.66"}], "}"}]}], "}"}]}], "]"}]}], "}"}], 
-      "]"}], ",", "\[IndentingNewLine]", 
-     RowBox[{"Graphics", "[", 
-      RowBox[{"{", 
-       RowBox[{
-        RowBox[{"EdgeForm", "[", 
-         RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
-        RowBox[{"CapForm", "[", "\"\<Round\>\"", "]"}], ",", 
-        RowBox[{"Thickness", "[", 
-         RowBox[{"diskradius", "+", 
-          RowBox[{"thickness", "*", "2"}]}], "]"}], ",", 
         RowBox[{"EdgeForm", "[", "Blue", "]"}], ",", "Blue", ",", 
         RowBox[{"Line", "[", 
          RowBox[{
@@ -1640,20 +1641,20 @@ Cell[BoxData[{
           RowBox[{"{", 
            RowBox[{
             RowBox[{"{", 
-             RowBox[{"0", ",", "1"}], "}"}], ",", 
+             RowBox[{
+              RowBox[{"-", "0.01"}], ",", "1.01"}], "}"}], ",", 
             RowBox[{"{", 
-             RowBox[{"0", ",", "0"}], "}"}]}], "}"}]}], "]"}]}], "}"}], "]"}],
-      ",", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"-", "0.01"}], ",", "0.005"}], "}"}]}], "}"}]}], 
+         "]"}]}], "}"}], "]"}], ",", "\[IndentingNewLine]", 
      RowBox[{"Graphics", "[", 
       RowBox[{"{", 
        RowBox[{
         RowBox[{"EdgeForm", "[", 
          RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
         RowBox[{"CapForm", "[", "\"\<Round\>\"", "]"}], ",", 
-        RowBox[{"Thickness", "[", 
-         RowBox[{"diskradius", "+", 
-          RowBox[{"thickness", "*", "2"}]}], "]"}], ",", 
-        RowBox[{"EdgeForm", "[", "Blue", "]"}], ",", "Blue", ",", 
+        RowBox[{"Thickness", "[", "diskradius", "]"}], ",", 
+        RowBox[{"EdgeForm", "[", "Purple", "]"}], ",", "Purple", ",", 
         RowBox[{"Line", "[", 
          RowBox[{
           RowBox[{
@@ -1703,7 +1704,7 @@ Cell[BoxData[{
        RowBox[{
         RowBox[{"EdgeForm", "[", 
          RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
-        RowBox[{"EdgeForm", "[", "Red", "]"}], ",", "Red", ",", 
+        RowBox[{"EdgeForm", "[", "Purple", "]"}], ",", "Purple", ",", 
         RowBox[{"Disk", "[", 
          RowBox[{
           RowBox[{"TernCoords", "[", 
@@ -1715,7 +1716,7 @@ Cell[BoxData[{
        RowBox[{
         RowBox[{"EdgeForm", "[", 
          RowBox[{"Thickness", "[", "thickness", "]"}], "]"}], ",", 
-        RowBox[{"EdgeForm", "[", "Red", "]"}], ",", "Red", ",", 
+        RowBox[{"EdgeForm", "[", "Purple", "]"}], ",", "Purple", ",", 
         RowBox[{"Disk", "[", 
          RowBox[{
           RowBox[{"TernCoords", "[", 
@@ -1780,11 +1781,13 @@ Cell[BoxData[{
   RowBox[{"Export", "[", 
    RowBox[{"\"\<Sc_pesbias.pdf\>\"", ",", "imageScBayes"}], "]"}], 
   ";"}]}], "Input",
- CellChangeTimes->{{3.901803137326474*^9, 3.9018031862349358`*^9}},
+ CellChangeTimes->{{3.901803137326474*^9, 3.9018031862349358`*^9}, {
+  3.916852296215086*^9, 3.916852387178088*^9}, {3.9168524379433126`*^9, 
+  3.91685244524644*^9}},
  CellLabel->
-  "In[705]:=",ExpressionUUID->"17ae4aba-7f9f-445c-8e85-4fc20001096c"]
-}, Closed]]
-}, Closed]],
+  "In[1489]:=",ExpressionUUID->"17ae4aba-7f9f-445c-8e85-4fc20001096c"]
+}, Open  ]]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -6299,7 +6302,7 @@ Cell[BoxData[{
 }, Closed]]
 },
 WindowSize->{651, 782},
-WindowMargins->{{273, Automatic}, {1, Automatic}},
+WindowMargins->{{Automatic, 489}, {54, Automatic}},
 FrontEndVersion->"12.1 for Mac OS X x86 (64-bit) (March 18, 2020)",
 StyleDefinitions->"Default.nb",
 ExpressionUUID->"e2da2d99-d586-4824-b106-4bcee9eb019d"
@@ -6318,50 +6321,50 @@ Notebook[{
 Cell[400, 13, 723, 16, 215, "Input",ExpressionUUID->"196c04e3-582d-419b-b9b5-692b8cb4ad14"],
 Cell[CellGroupData[{
 Cell[1148, 33, 166, 3, 67, "Section",ExpressionUUID->"56178bde-0010-4e3c-94aa-2d594ea84240"],
-Cell[1317, 38, 3505, 106, 523, "Input",ExpressionUUID->"f144eb03-4b76-41e7-953c-bb0a3325b1b9"]
+Cell[1317, 38, 3534, 104, 451, "Input",ExpressionUUID->"f144eb03-4b76-41e7-953c-bb0a3325b1b9"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4888, 147, 152, 3, 67, "Section",ExpressionUUID->"77be4f89-624c-49e2-9e1f-1d01f69ed742"],
+Cell[CellGroupData[{
+Cell[5065, 154, 161, 3, 54, "Subsection",ExpressionUUID->"e63921b9-fa77-4735-9acb-362e6e01e142"],
+Cell[5229, 159, 28607, 815, 2656, "Input",ExpressionUUID->"426e7191-d668-4044-ba18-b8c170ef784c"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[33873, 979, 164, 3, 54, "Subsection",ExpressionUUID->"487c429c-9a82-4dbc-9c1f-8ee48f0a9c6d"],
+Cell[34040, 984, 27770, 803, 2572, "Input",ExpressionUUID->"17ae4aba-7f9f-445c-8e85-4fc20001096c"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[61859, 1793, 160, 3, 67, "Section",ExpressionUUID->"5fdddcb9-53eb-40d5-be9c-7f66f7c6f4bd"],
+Cell[CellGroupData[{
+Cell[62044, 1800, 161, 3, 54, "Subsection",ExpressionUUID->"27cb2102-8832-4039-86aa-cfaebae63c90"],
+Cell[62208, 1805, 23833, 705, 2207, "Input",ExpressionUUID->"efbc92ef-795e-4006-baa7-4d4e4c67a44f"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[4859, 149, 152, 3, 53, "Section",ExpressionUUID->"77be4f89-624c-49e2-9e1f-1d01f69ed742"],
-Cell[CellGroupData[{
-Cell[5036, 156, 161, 3, 54, "Subsection",ExpressionUUID->"e63921b9-fa77-4735-9acb-362e6e01e142"],
-Cell[5200, 161, 28254, 812, 2635, "Input",ExpressionUUID->"426e7191-d668-4044-ba18-b8c170ef784c"]
-}, Closed]],
-Cell[CellGroupData[{
-Cell[33491, 978, 164, 3, 38, "Subsection",ExpressionUUID->"487c429c-9a82-4dbc-9c1f-8ee48f0a9c6d"],
-Cell[33658, 983, 27542, 801, 2551, "Input",ExpressionUUID->"17ae4aba-7f9f-445c-8e85-4fc20001096c"]
+Cell[86078, 2515, 164, 3, 38, "Subsection",ExpressionUUID->"9be54854-de71-4067-8735-14e275b1d764"],
+Cell[86245, 2520, 23697, 702, 2152, "Input",ExpressionUUID->"970d0b07-9721-4e8f-88e6-d828d638dcfb"]
 }, Closed]]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[61249, 1790, 160, 3, 53, "Section",ExpressionUUID->"5fdddcb9-53eb-40d5-be9c-7f66f7c6f4bd"],
+Cell[109991, 3228, 154, 3, 53, "Section",ExpressionUUID->"1a1f86d7-a873-4ad4-977b-94f3a8380be9"],
 Cell[CellGroupData[{
-Cell[61434, 1797, 161, 3, 54, "Subsection",ExpressionUUID->"27cb2102-8832-4039-86aa-cfaebae63c90"],
-Cell[61598, 1802, 23833, 705, 2207, "Input",ExpressionUUID->"efbc92ef-795e-4006-baa7-4d4e4c67a44f"]
+Cell[110170, 3235, 158, 3, 54, "Subsection",ExpressionUUID->"e789ec06-be53-4982-9a3d-b509e6c66305"],
+Cell[110331, 3240, 24789, 741, 2152, "Input",ExpressionUUID->"98d8da1a-58a1-483b-9836-5b37418c1643"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[85468, 2512, 164, 3, 38, "Subsection",ExpressionUUID->"9be54854-de71-4067-8735-14e275b1d764"],
-Cell[85635, 2517, 23697, 702, 2152, "Input",ExpressionUUID->"970d0b07-9721-4e8f-88e6-d828d638dcfb"]
+Cell[135157, 3986, 162, 3, 38, "Subsection",ExpressionUUID->"13977222-7d9c-43e9-8aa7-b9434867a259"],
+Cell[135322, 3991, 24430, 736, 2207, "Input",ExpressionUUID->"481fc8fd-4f4d-4dc9-9f75-d8befed0ed6f"]
 }, Closed]]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[109381, 3225, 154, 3, 53, "Section",ExpressionUUID->"1a1f86d7-a873-4ad4-977b-94f3a8380be9"],
+Cell[159801, 4733, 157, 3, 53, "Section",ExpressionUUID->"18934b39-f1c9-4ad8-962f-4fca515755e5"],
 Cell[CellGroupData[{
-Cell[109560, 3232, 158, 3, 54, "Subsection",ExpressionUUID->"e789ec06-be53-4982-9a3d-b509e6c66305"],
-Cell[109721, 3237, 24789, 741, 2152, "Input",ExpressionUUID->"98d8da1a-58a1-483b-9836-5b37418c1643"]
+Cell[159983, 4740, 210, 4, 54, "Subsection",ExpressionUUID->"01459ff3-7112-410f-b5cb-cfe68319a187"],
+Cell[160196, 4746, 25976, 774, 2194, "Input",ExpressionUUID->"667758dd-e0ef-47ce-912a-3eafd00dfa44"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[134547, 3983, 162, 3, 38, "Subsection",ExpressionUUID->"13977222-7d9c-43e9-8aa7-b9434867a259"],
-Cell[134712, 3988, 24430, 736, 2207, "Input",ExpressionUUID->"481fc8fd-4f4d-4dc9-9f75-d8befed0ed6f"]
-}, Closed]]
-}, Closed]],
-Cell[CellGroupData[{
-Cell[159191, 4730, 157, 3, 53, "Section",ExpressionUUID->"18934b39-f1c9-4ad8-962f-4fca515755e5"],
-Cell[CellGroupData[{
-Cell[159373, 4737, 210, 4, 54, "Subsection",ExpressionUUID->"01459ff3-7112-410f-b5cb-cfe68319a187"],
-Cell[159586, 4743, 25976, 774, 2194, "Input",ExpressionUUID->"667758dd-e0ef-47ce-912a-3eafd00dfa44"]
-}, Closed]],
-Cell[CellGroupData[{
-Cell[185599, 5522, 214, 4, 38, "Subsection",ExpressionUUID->"f5261242-40cf-4c30-a873-36189654fa6c"],
-Cell[185816, 5528, 25548, 768, 2194, "Input",ExpressionUUID->"4eab7f5e-a6cf-4550-a8ea-578dfde66aa3"]
+Cell[186209, 5525, 214, 4, 38, "Subsection",ExpressionUUID->"f5261242-40cf-4c30-a873-36189654fa6c"],
+Cell[186426, 5531, 25548, 768, 2194, "Input",ExpressionUUID->"4eab7f5e-a6cf-4550-a8ea-578dfde66aa3"]
 }, Closed]]
 }, Closed]]
 }
